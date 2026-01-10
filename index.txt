@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>JO – A Story Engraved in Rice</title>
+<script src="https://www.paypal.com/sdk/js?client-id=ATunfburPpH08yXqKGVQzaAJ1ZcXGUjanI7vXU06yAybA5THXVOTSrXev9w1BmKGI4niWSjzkeoKV7fz&currency=EUR"></script>
+<style>
+body{margin:0;font-family:Segoe UI,Arial;background:#f3f4f6}
+header{background:#0f172a;color:#fff;padding:18px 25px;display:flex;justify-content:space-between;align-items:center}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:45px;height:45px;border-radius:8px;object-fit:cover}
+.brand h1{margin:0;font-size:26px;letter-spacing:2px}
+.brand span{font-size:12px;color:#cbd5f5}
+.lang{width:42px;height:42px;background:#1e293b;border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative}
+.lang-menu{display:none;position:absolute;right:0;top:50px;background:white;color:black;border-radius:8px;overflow:hidden;z-index:1000}
+.lang-menu div{padding:10px 15px;cursor:pointer}
+.lang-menu div:hover{background:#eee}
+.container{max-width:1100px;margin:30px auto;background:white;padding:30px;border-radius:12px}
+.section{margin-top:40px}
+.products{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px}
+.card{border:1px solid #ddd;border-radius:12px;padding:15px;background:#fafafa;text-align:center}
+button{background:#0f172a;color:white;border:none;padding:10px;border-radius:8px;width:100%;cursor:pointer;margin-top:5px}
+
+/* Schmalere Felder */
+select, input[type="text"], .narrow-field {max-width: 400px; width: 100%; padding: 10px; margin-top: 8px; display: block;}
+
+.colors{margin-top:10px}
+.color{width:28px;height:28px;border-radius:50%;display:inline-block;margin:5px;border:2px solid #ccc;cursor:pointer}
+.red{background:red}.white{background:white}.yellow{background:yellow}.pink{background:pink}.blue{background:blue}.green{background:green}.orange{background:orange}
+.preview{text-align:center;margin-top:15px}
+.preview img{max-width:150px;border-radius:10px;margin:5px; border: 1px solid #ddd;}
+.gift{border:1px dashed #aaa;padding:15px;border-radius:10px;margin-top:20px; max-width: 400px;}
+.cart{margin-top:40px;border-top:2px solid #000;padding-top:20px}
+.cart-item{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #ccc;flex-wrap:wrap}
+.delete-btn {background:none; color:red; border:none; width:auto; cursor:pointer; font-size:18px; margin-left:10px;}
+.qty-control{display:flex;align-items:center;gap:5px;margin-top:5px; justify-content: center;}
+.qty-control button{width:30px;height:30px;padding:0;font-size:16px}
+.qty-control input{width:50px;text-align:center;padding:5px}
+.bold-main{font-weight:800;text-align:center;margin:15px 0;color:#000}
+.text-price-info {font-size: 0.9em; color: #666; margin-top: 5px;}
+footer{text-align:center;margin-top:40px;color:#555}
+</style>
+</head>
+<body>
+
+<header>
+<div class="brand">
+<img src="https://via.placeholder.com/100">
+<div>
+<h1>JO</h1>
+<span data-i18n="subtitle">A Story Engraved in Rice</span>
+</div>
+</div>
+
+<div class="lang" onclick="toggleLang()">🌍
+<div class="lang-menu" id="langMenu">
+<div onclick="changeLang('de')">Deutsch</div>
+<div onclick="changeLang('en')">English</div>
+<div onclick="changeLang('ar')">العربية</div>
+<div onclick="changeLang('fr')">Français</div>
+<div onclick="changeLang('es')">Español</div>
+</div>
+</div>
+</header>
+
+<div class="container">
+
+<!-- VIDEO -->
+<div class="section">
+<video id="video" controls style="width:100%;border-radius:10px"></video>
+<input type="file" accept="video/*" onchange="video.src=URL.createObjectURL(this.files[0])">
+</div>
+
+<!-- KETTEN UND ANHÄNGER -->
+<div class="section">
+<h3 data-i18n="necklaces">Ketten und Anhänger auswählen</h3>
+<div class="products">
+    <div class="card">
+        <img id="img_Stoff" src="https://via.placeholder.com/300?text=Stoffkette">
+        <p>Stoff (3€)</p>
+        <input type="file" accept="image/*" onchange="document.getElementById('img_Stoff').src=URL.createObjectURL(this.files[0])">
+        <div class="qty-control"><button onclick="changeQty('Kette','Stoff',-1)">-</button><input type="number" id="qty_Stoff" value="1" min="1" max="10" readonly><button onclick="changeQty('Kette','Stoff',1)">+</button></div>
+        <button onclick="addNecklace('Stoff',3)">Hinzufügen</button>
+    </div>
+    <div class="card">
+        <img id="img_Silber" src="https://via.placeholder.com/300?text=Silberkette">
+        <p>Silber (+5€)</p>
+        <input type="file" accept="image/*" onchange="document.getElementById('img_Silber').src=URL.createObjectURL(this.files[0])">
+        <div class="qty-control"><button onclick="changeQty('Kette','Silber',-1)">-</button><input type="number" id="qty_Silber" value="1" min="1" max="10" readonly><button onclick="changeQty('Kette','Silber',1)">+</button></div>
+        <button onclick="addNecklace('Silber',5)">Hinzufügen</button>
+    </div>
+    <div class="card">
+        <img id="img_Leder" src="https://via.placeholder.com/300?text=Lederkette">
+        <p>Leder (+3€)</p>
+        <input type="file" accept="image/*" onchange="document.getElementById('img_Leder').src=URL.createObjectURL(this.files[0])">
+        <div class="qty-control"><button onclick="changeQty('Kette','Leder',-1)">-</button><input type="number" id="qty_Leder" value="1" min="1" max="10" readonly><button onclick="changeQty('Kette','Leder',1)">+</button></div>
+        <button onclick="addNecklace('Leder',3)">Hinzufügen</button>
+    </div>
+    <div class="card">
+        <img id="img_Schlüsselanhänger" src="https://via.placeholder.com/300?text=Schlüsselanhänger">
+        <p>Schlüsselanhänger (1,50€)</p>
+        <input type="file" accept="image/*" onchange="document.getElementById('img_Schlüsselanhänger').src=URL.createObjectURL(this.files[0])">
+        <div class="qty-control"><button onclick="changeQty('Kette','Schlüssel',-1)">-</button><input type="number" id="qty_Schlüssel" value="1" min="1" max="10" readonly><button onclick="changeQty('Kette','Schlüssel',1)">+</button></div>
+        <button onclick="addNecklace('Schlüsselanhänger',1.50,'Schlüssel')">Hinzufügen</button>
+    </div>
+</div>
+</div>
+
+<!-- FLASCHE -->
+<div class="section">
+<h3 data-i18n="bottle">Flasche personalisieren</h3>
+<select id="bottleSelect" class="narrow-field" onchange="updatePreview()">
+<option value="">Flaschenform wählen</option>
+<option data-p="2">Rund (2€)</option>
+<option data-p="2">Oval (2€)</option>
+<option data-p="2">Tropfen (2€)</option>
+<option data-p="2">Rechteck (2€)</option>
+<option data-p="2">Stern (2€)</option>
+<option data-p="3">Herz (3€)</option>
+<option data-p="3">Blume (3€)</option>
+<option data-p="3">Diamant (3€)</option>
+</select>
+
+<p>Flaschen-Vorschau hochladen:</p>
+<input type="file" class="narrow-field" accept="image/*" onchange="updateBottleImage(this)">
+
+<p>Ölfarbe 0,99€</p>
+<div class="colors">
+<span class="color red" onclick="pickBottleColor('rot')"></span>
+<span class="color white" onclick="pickBottleColor('weiss')"></span>
+<span class="color yellow" onclick="pickBottleColor('gelb')"></span>
+<span class="color pink" onclick="pickBottleColor('rosa')"></span>
+<span class="color blue" onclick="pickBottleColor('blau')"></span>
+<span class="color green" onclick="pickBottleColor('gruen')"></span>
+<span class="color orange" onclick="pickBottleColor('orange')"></span>
+</div>
+
+<p>Beschriftung (3 Zeichen 2,99€, bis 5 Zeichen 3,99€)</p>
+<input type="text" maxlength="5" id="bottleText" class="narrow-field" placeholder="Text (Max 5 Zeichen z.B. R❤️S)" oninput="calcTextPrice()">
+<div id="textPriceDisplay" class="text-price-info">Textpreis: 0,00€</div>
+
+<div class="qty-control" style="justify-content: flex-start; margin-top: 15px;">
+    <button onclick="changeQty('Flasche','current',-1)">-</button>
+    <input type="number" id="qty_current" value="1" min="1" max="10" readonly>
+    <button onclick="changeQty('Flasche','current',1)">+</button>
+</div>
+<button style="max-width:400px;" onclick="addBottle()">Flasche hinzufügen</button>
+
+<div class="preview" id="bottlePreview">
+    <img id="mainBottleImg" src="https://via.placeholder.com/150?text=Vorschau" style="display:none;">
+</div>
+</div>
+
+<!-- GIFT -->
+<div class="section">
+<h3>Geschenkbox wählen</h3>
+<div class="gift">
+<select id="giftType" class="narrow-field">
+<option value="none">Keine Box</option>
+<option value="Standard Box" data-p="1.99">Standard Box (1,99 €)</option>
+<option value="Holz Box" data-p="3.99">Exquisite Holz Box (3,99 €)</option>
+</select>
+<p>Box Bild hochladen:</p>
+<input type="file" accept="image/*" id="giftImgInput" onchange="updateGiftPreview(this)">
+<div id="giftPreview" class="preview"></div>
+
+<div class="qty-control" style="justify-content: flex-start; margin-top:10px;">
+<button onclick="changeQty('Gift','gift',-1)">-</button>
+<input type="number" id="qty_gift" value="1" min="1" max="10" readonly>
+<button onclick="changeQty('Gift','gift',1)">+</button>
+</div>
+<button onclick="addGift()">Geschenkbox hinzufügen</button>
+</div>
+</div>
+
+<!-- CART -->
+<div class="cart">
+<h3 data-i18n="cart">Warenkorb</h3>
+<div id="cartItems"></div>
+<p id="shippingText"></p>
+<p id="total"><strong>Gesamt: €0.00</strong></p>
+🚚 Kostenloser Versand ab 25 €
+<input type="email" id="customerEmail" placeholder="E-Mail" class="narrow-field">
+<br>
+<button style="max-width:400px;" onclick="saveOrder()">Bestellung speichern</button>
+
+<!-- PAYPAL BUTTON -->
+<div id="paypal-button-container" style="max-width:400px; margin-top:15px;"></div>
+</div>
+
+<footer>📧 oj.grainofrice@gmail.com</footer>
+</div>
+
+<script>
+let cart=[]; 
+let shippingCost=3;
+let currentBottle={shape:'',color:'',text:'',price:0,qty:1, customImg:''};
+let giftCustomImg='';
+
+function changeQty(type,name,val){
+    let id='qty_'+name; 
+    let input=document.getElementById(id); 
+    let current=parseInt(input.value)+val; 
+    if(current<1) current=1; 
+    if(current>10) current=10; 
+    input.value=current;
+    if(type==='Flasche') currentBottle.qty=current;
+}
+
+function updateBottleImage(input) {
+    if(input.files && input.files[0]){
+        currentBottle.customImg = URL.createObjectURL(input.files[0]);
+        let img = document.getElementById('mainBottleImg');
+        img.src = currentBottle.customImg;
+        img.style.display='inline-block';
+    }
+}
+
+function updateGiftPreview(input){
+    if(input.files && input.files[0]){
+        giftCustomImg = URL.createObjectURL(input.files[0]);
+        document.getElementById('giftPreview').innerHTML=`<img src="${giftCustomImg}" style="max-width:100px;border-radius:5px;">`;
+    }
+}
+
+function calcTextPrice(){
+    let txt = document.getElementById('bottleText').value;
+    let price = 0;
+    if(txt.length>0 && txt.length<=3) price=2.99;
+    else if(txt.length>3) price=3.99;
+    document.getElementById('textPriceDisplay').innerText="Textpreis: "+price.toFixed(2).replace('.',',')+"€";
+    return price;
+}
+
+function addNecklace(name, price, qtyIdPart){
+    let id = qtyIdPart || name;
+    let qty = parseInt(document.getElementById('qty_'+id).value);
+    cart.push({type:'Kette', name:name, price:price, qty:qty});
+    updateCart();
+}
+
+function pickBottleColor(c){
+    currentBottle.color=c;
+    currentBottle.price=0.99; 
+    updatePreview();
+}
+
+function addBottle(){
+    let sel=document.getElementById('bottleSelect');
+    if(!sel.value||!currentBottle.color){alert("Bitte Form und Farbe wählen"); return;}
+    let txt=document.getElementById('bottleText').value;
+    let formPrice=parseFloat(sel.selectedOptions[0].dataset.p);
+    let txtPrice=calcTextPrice();
+    cart.push({
+        type:'Flasche',
+        shape:sel.value,
+        color:currentBottle.color,
+        text:txt,
+        price:formPrice+0.99+txtPrice,
+        qty:currentBottle.qty,
+        img: currentBottle.customImg
+    });
+    currentBottle={shape:'',color:'',text:'',price:0,qty:1,customImg:''};
+    document.getElementById('bottleSelect').value=''; 
+    document.getElementById('bottleText').value=''; 
+    document.getElementById('qty_current').value=1;
+    document.getElementById('mainBottleImg').style.display='none';
+    calcTextPrice();
+    updateCart();
+}
+
+function updatePreview(){
+    let sel=document.getElementById('bottleSelect');
+    currentBottle.shape = sel.value;
+    if(!currentBottle.customImg && currentBottle.shape){
+        let img=document.getElementById('mainBottleImg');
+        img.src='https://via.placeholder.com/150?text='+currentBottle.shape;
+        img.style.display='inline-block';
+    }
+}
+
+function addGift(){
+    let sel=document.getElementById('giftType');
+    if(sel.value==='none') return;
+    let price=parseFloat(sel.selectedOptions[0].dataset.p);
+    let qty=parseInt(document.getElementById('qty_gift').value);
+    cart.push({type:'Geschenkbox', name: sel.value, price: price, qty: qty, img: giftCustomImg});
+    updateCart();
+}
+
+function removeItem(idx){
+    cart.splice(idx,1);
+    updateCart();
+}
+
+function updateCart(){
+    let container=document.getElementById('cartItems'); container.innerHTML='';
+    let subtotal=0;
+    cart.forEach((i,idx)=>{
+        let div=document.createElement('div'); div.className='cart-item';
+        let text='';
+        if(i.type==='Flasche') text=`<div><strong>${i.type}</strong>: ${i.shape}, Farbe: ${i.color}, Text: ${i.text} (x${i.qty})</div>`;
+        else if(i.type==='Kette') text=`<div><strong>${i.name}</strong> (x${i.qty})</div>`;
+        else if(i.type==='Geschenkbox') text=`<div><strong>${i.name}</strong> (x${i.qty})</div>`;
+        div.innerHTML=`${text} <div>€${(i.price*i.qty).toFixed(2)} <button class="delete-btn" onclick="removeItem(${idx})">🗑️</button></div>`;
+        container.appendChild(div);
+        subtotal+=i.price*i.qty;
+    });
+    let shipping=subtotal>=25||subtotal==0?0:shippingCost;
+    document.getElementById('shippingText').innerText=shipping>0?"Versand: €"+shipping.toFixed(2):"Versand: Kostenlos";
+    document.getElementById('total').innerHTML="<strong>Gesamt: €"+(subtotal+shipping).toFixed(2)+"</strong>";
+}
+
+function saveOrder(){
+    let email=document.getElementById('customerEmail').value;
+    if(!email){alert('Bitte E-Mail eingeben'); return;}
+    let data={email:email, cart:cart, total:document.getElementById('total').innerText};
+    console.log("Saving order...", data);
+    alert('Bestellung gespeichert! (Simulation)');
+}
+
+// PayPal-Funktion
+function getTotalForPayPal(){
+    let text = document.getElementById("total").innerText;
+    let num = text.replace(/[^\d,\.]/g,'').replace(',','.');
+    return parseFloat(num) || 0.01;
+}
+
+paypal.Buttons({
+    style: { layout: 'vertical', color: 'gold', shape: 'rect', label: 'paypal' },
+    createOrder: function(data, actions) {
+        return actions.order.create({
+            purchase_units: [{
+                amount: { value: getTotalForPayPal().toFixed(2) }
+            }]
+        });
+    },
+    onApprove: function(data, actions) {
+        return actions.order.capture().then(function(details) {
+            alert('Zahlung erfolgreich! Vielen Dank, ' + details.payer.name.given_name);
+        });
+    },
+    onError: function(err){
+        console.error(err);
+        alert('Fehler bei der PayPal-Zahlung.');
+    }
+}).render('#paypal-button-container');
+
+function toggleLang(){let m=document.getElementById('langMenu'); m.style.display=m.style.display==="block"?"none":"block";}
+function changeLang(l){
+document.documentElement.dir=l==="ar"?"rtl":"ltr";
+const t={de:{necklaces:"Ketten und Anhänger auswählen",bottle:"Flasche personalisieren",cart:"Warenkorb",subtitle:"A Story Engraved in Rice"},en:{necklaces:"Choose Necklaces & Pendants",bottle:"Customize Bottle",cart:"Cart",subtitle:"A Story Engraved in Rice"}};
+document.querySelectorAll("[data-i18n]").forEach(e=>{e.textContent=t[l][e.dataset.i18n]||e.textContent});
+}
+</script>
+</body>
+</html>
